@@ -1,28 +1,5 @@
 import { DataTypes, Model } from "sequelize";
 import sequelizeConnection from "../configs/db";
-// import { User } from "./user";
-
-// interface IPost {
-//   id: number;
-//   title: string;
-//   body: string;
-//   createdAt?: Date;
-//   updatedAt?: Date;
-//   deletedAt?: Date;
-// }
-
-// export interface PostInput extends Optional<IPost, "id"> {}
-// export interface PostOuput extends Required<IPost> {}
-
-// class Post extends Model<IPost, PostInput> implements IPost {
-//   public id!: number;
-//   public title!: string;
-//   public body!: string;
-
-//   public readonly createdAt!: Date;
-//   public readonly updatedAt!: Date;
-//   public readonly deletedAt!: Date;
-// }
 
 export class Post extends Model {}
 

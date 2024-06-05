@@ -1,7 +1,7 @@
 import httpMocks from 'node-mocks-http';
 import { postController } from "../../src/controllers/post-controller"
 import { postRepository } from "../../src/repositories/post-repository";
-import { Post } from '../../src/models/post';
+import { Post } from '../../src/models';
 
 describe("PostControllerTest", () => {
     const mockedPosts = [

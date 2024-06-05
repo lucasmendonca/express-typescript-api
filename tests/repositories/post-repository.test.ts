@@ -1,5 +1,5 @@
 import { postRepository } from "../../src/repositories/post-repository";
-import { Post } from '../../src/models/post';
+import { Post } from '../../src/models';
 
 describe("PostRepositoryTest", () => {
     const mockedPosts = [

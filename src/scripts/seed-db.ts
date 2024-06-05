@@ -1,4 +1,4 @@
-import { Post, User } from "../models/post";
+import { Post, User } from "../models";
 // import { User } from "../models/user";
 // import * as User from "../models/user";
 

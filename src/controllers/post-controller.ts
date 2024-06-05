@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { postRepository } from "../repositories/post-repository";
 
 class PostController {
@@ -30,7 +30,9 @@ class PostController {
     });
   }
 
-  public create(req: Request, res: Response) {
+  public async create(req: Request, res: Response, next: NextFunction) {
+    //  const validatedBody = await validateSchema(postSchema, res, req.body)
+    //  console.log(validatedBody)
     return res.json({
       response: "Post - Create",
     });

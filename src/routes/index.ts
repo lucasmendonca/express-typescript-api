@@ -1,5 +1,7 @@
 import { Router } from 'express';
 import { postController } from  '../controllers/post-controller';
+import { postSchema } from '../validators'
+import { schemaValidator } from '../middlewares/validator'
 
 const router: Router = Router();
 
@@ -9,8 +11,8 @@ const router: Router = Router();
 // Post routes
 router.get("/posts", postController.list);
 router.get("/posts/:id", postController.get);
-router.post("/posts", postController.create);
-router.put("/posts/:id", postController.update);
+router.post("/posts", schemaValidator(postSchema), postController.create);
+router.put("/posts/:id", schemaValidator(postSchema), postController.update);
 router.delete("/posts/:id", postController.delete);
 
 // Users routes

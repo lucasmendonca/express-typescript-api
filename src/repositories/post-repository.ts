@@ -1,4 +1,4 @@
-import { Post } from "../models/post";
+import { Post } from "../models";
 
 class PostRepository {
   public getById(id: string): Promise<Post|null> {
