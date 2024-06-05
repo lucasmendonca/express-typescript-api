@@ -43,11 +43,38 @@ describe("PostRepositoryTest", () => {
     describe("#getAll()", () => {
         test("should return all posts", async () => {
             const findSPy = jest.spyOn(Post, "findAll").mockResolvedValue(mockedPosts)
-
             const response = await postRepository.getAll()
 
             expect(findSPy).toHaveBeenCalledTimes(1)
             expect(response).toEqual(mockedPosts)
+        })
+    })
+
+    describe("#delete()", () => {
+        test("should delete post and return value", async () => {
+            const id = "1"
+            const mockedPost = mockedPosts[0]
+            const destroySpy = jest.spyOn(mockedPost, "destroy").mockResolvedValueOnce()
+            const getByIdSpy = jest.spyOn(postRepository, "getById").mockResolvedValueOnce(mockedPost)
+
+            const response = await postRepository.delete(id)
+
+            expect(getByIdSpy).toHaveBeenCalledWith(id)
+            expect(destroySpy).toHaveBeenCalledTimes(1)
+            expect(response).toEqual(mockedPost)
+        })
+
+        test("should return null when post does not exist", async () => {
+            const id = "1"
+            const mockedPost = mockedPosts[0]
+            const destroySpy = jest.spyOn(mockedPost, "destroy").mockClear()
+            const getByIdSpy = jest.spyOn(postRepository, "getById").mockResolvedValueOnce(null)
+
+            const response = await postRepository.delete(id)
+
+            expect(getByIdSpy).toHaveBeenCalledWith(id)
+            expect(destroySpy).not.toHaveBeenCalled()
+            expect(response).toEqual(null)
         })
     })
 })

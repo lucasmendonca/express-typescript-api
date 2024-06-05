@@ -7,7 +7,8 @@ class PostController {
     const response = await postRepository.getAll();
     
     return res.json({
-      data: response
+      data: response,
+      success: true
     });
   }
 
@@ -17,12 +18,14 @@ class PostController {
 
     if (!response) {
       return res.status(404).json({
-        error: "Not found",
+        success: false,
+        message: "Entity not found",
         data: null,
       });
     }
 
     return res.json({
+      success: true,
       data: response,
     });
   }
@@ -33,15 +36,29 @@ class PostController {
     });
   }
 
-  public delete(req: Request, res: Response) {
+  public async delete(req: Request, res: Response) {
+    const { id } = req.params;
+    const response = await postRepository.delete(id);
+
+    if (!response) {
+      return res.status(404).json({
+        success: false,
+        message: "Entity not found",
+        data: null,
+      });
+    }
+
     return res.json({
-      response: "Post - Delete",
+      success: true,
+      data: response,
+      message: "Post deleted with success"
     });
   }
 
   public update(req: Request, res: Response) {
     return res.json({
-      response: "Post - Update",
+      success: true,
+      data: "Post - Update",
     });
   }
 }

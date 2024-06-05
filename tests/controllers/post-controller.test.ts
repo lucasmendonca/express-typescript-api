@@ -41,7 +41,8 @@ describe("PostControllerTest", () => {
             const response = await postController.list(mockReq, mockRes)
             
             expect(resJsonSpy).toHaveBeenCalledWith({
-                data: mockedPosts
+                success: true,
+                data: mockedPosts,
             })
             expect(getByIdSpy).toHaveBeenCalledTimes(1)
         })
@@ -61,7 +62,8 @@ describe("PostControllerTest", () => {
             const response = await postController.get(mockReq, mockRes)
 
             expect(resJsonSpy).toHaveBeenCalledWith({
-                data: mockedPosts[0]
+                success: true,
+                data: mockedPosts[0],
             })
             expect(getByIdSpy).toHaveBeenCalledWith(id)
             expect(response.statusCode).toEqual(200)
@@ -80,10 +82,55 @@ describe("PostControllerTest", () => {
             const response = await postController.get(mockReq, mockRes)
 
             expect(resJsonSpy).toHaveBeenCalledWith({
-                error: 'Not found',
+                success: false,
+                message: 'Entity not found',
                 data: null
             })
             expect(getByIdSpy).toHaveBeenCalledWith(id)
+            expect(response.statusCode).toEqual(404)
+        })
+    })
+
+    describe("#delete()", () => {
+        test("should delete post by Id", async () => {
+            const id = "1"
+            const mockRes = httpMocks.createResponse();
+            const mockReq = httpMocks.createRequest({
+                params: {
+                    id: id
+                }
+            });
+            const resJsonSpy = jest.spyOn(mockRes, "json")
+            const deleteSpy = jest.spyOn(postRepository, "delete").mockResolvedValue(mockedPosts[0])
+            const response = await postController.delete(mockReq, mockRes)
+
+            expect(resJsonSpy).toHaveBeenCalledWith({
+                success: true,
+                data: mockedPosts[0],
+                message: "Post deleted with success"
+            })
+            expect(deleteSpy).toHaveBeenCalledWith(id)
+            expect(response.statusCode).toEqual(200)
+        })
+
+        test("should return not found", async () => {
+            const id = "3"
+            const mockRes = httpMocks.createResponse();
+            const mockReq = httpMocks.createRequest({
+                params: {
+                    id: id
+                }
+            });
+            const resJsonSpy = jest.spyOn(mockRes, "json")
+            const deleteSpy = jest.spyOn(postRepository, "delete").mockResolvedValue(null)
+            const response = await postController.delete(mockReq, mockRes)
+
+            expect(deleteSpy).toHaveBeenCalledWith(id)
+            expect(resJsonSpy).toHaveBeenCalledWith({
+                success: false,
+                message: 'Entity not found',
+                data: null
+            })
             expect(response.statusCode).toEqual(404)
         })
     })

@@ -8,7 +8,18 @@ class PostRepository {
   }
 
   public getAll(): Promise<Post[]> {
+    // TODO: paginate
     return Post.findAll()
+  }
+
+  public async delete(id: string): Promise<Post|null> {
+    const post = await this.getById(id)
+    
+    if (post) {
+      post.destroy()
+    }
+
+    return post
   }
 }
 
