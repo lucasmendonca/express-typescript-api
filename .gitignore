@@ -4,3 +4,4 @@ node_modules/*
 .env
 database.sqlite3
 .vscode/*
+coverage/*
