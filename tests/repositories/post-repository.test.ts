@@ -29,7 +29,7 @@ describe("PostRepositoryTest", () => {
 
     describe("#getById()", () => {
         test("should get post by Id", async () => {
-            const id = "1"
+            const id = 1
             const findOneSpy = jest.spyOn(Post, "findOne").mockResolvedValue(mockedPosts[0])
 
             await postRepository.getById(id)
@@ -52,7 +52,7 @@ describe("PostRepositoryTest", () => {
 
     describe("#delete()", () => {
         test("should delete post and return value", async () => {
-            const id = "1"
+            const id = 1
             const mockedPost = mockedPosts[0]
             const destroySpy = jest.spyOn(mockedPost, "destroy").mockResolvedValueOnce()
             const getByIdSpy = jest.spyOn(postRepository, "getById").mockResolvedValueOnce(mockedPost)
@@ -65,7 +65,7 @@ describe("PostRepositoryTest", () => {
         })
 
         test("should return null when post does not exist", async () => {
-            const id = "1"
+            const id = 1
             const mockedPost = mockedPosts[0]
             const destroySpy = jest.spyOn(mockedPost, "destroy").mockClear()
             const getByIdSpy = jest.spyOn(postRepository, "getById").mockResolvedValueOnce(null)
@@ -80,7 +80,7 @@ describe("PostRepositoryTest", () => {
 
     describe("#create()", () => {
         test("should create new post and return value", async () => {
-            const id = "1"
+            const id = 1
      
             const mockedPost = mockedPosts[0]
             const saveSpy = jest.spyOn(Post.prototype, "save").mockResolvedValueOnce(mockedPost)
@@ -93,6 +93,45 @@ describe("PostRepositoryTest", () => {
 
             expect(saveSpy).toHaveBeenCalledTimes(1)
             expect(response).toEqual(mockedPost)
+        })
+    })
+
+
+    describe("#update()", () => {
+        test("should update post and return value", async () => {
+            const id = 1
+            const mockedPost = mockedPosts[0]
+            const updateSpy = jest.spyOn(Post.prototype, "update").mockResolvedValueOnce(mockedPost)
+            const getByIdSpy = jest.spyOn(postRepository, "getById").mockResolvedValueOnce(mockedPost)
+
+            const response = await postRepository.update(
+                id,
+                mockedPost.title,
+                mockedPost.body,
+                mockedPost.AuthorId,
+            )
+
+            expect(getByIdSpy).toHaveBeenCalledWith(id)
+            expect(updateSpy).toHaveBeenCalledTimes(1)
+            expect(response).toEqual(mockedPost)
+        })
+
+        test("should not update and retung null when it does not exist", async () => {
+            const id = 1
+            const mockedPost = mockedPosts[0]
+            const updateSpy = jest.spyOn(Post.prototype, "update").mockClear()
+            const getByIdSpy = jest.spyOn(postRepository, "getById").mockResolvedValueOnce(null)
+
+            const response = await postRepository.update(
+                id,
+                mockedPost.title,
+                mockedPost.body,
+                mockedPost.AuthorId,
+            )
+
+            expect(getByIdSpy).toHaveBeenCalledWith(id)
+            expect(updateSpy).toHaveBeenCalledTimes(0)
+            expect(response).toEqual(null)
         })
     })
 })

@@ -50,7 +50,7 @@ describe("PostControllerTest", () => {
 
     describe("#get()", () => {
         test("should request post by Id", async () => {
-            const id = "1"
+            const id = 1
             const mockRes = httpMocks.createResponse();
             const mockReq = httpMocks.createRequest({
                 params: {
@@ -70,7 +70,7 @@ describe("PostControllerTest", () => {
         })
 
         test("should return not found", async () => {
-            const id = "3"
+            const id = 3
             const mockRes = httpMocks.createResponse();
             const mockReq = httpMocks.createRequest({
                 params: {
@@ -93,7 +93,7 @@ describe("PostControllerTest", () => {
 
     describe("#delete()", () => {
         test("should delete post by Id", async () => {
-            const id = "1"
+            const id = 1
             const mockRes = httpMocks.createResponse();
             const mockReq = httpMocks.createRequest({
                 params: {
@@ -114,7 +114,7 @@ describe("PostControllerTest", () => {
         })
 
         test("should return not found", async () => {
-            const id = "3"
+            const id = 3
             const mockRes = httpMocks.createResponse();
             const mockReq = httpMocks.createRequest({
                 params: {
@@ -137,7 +137,7 @@ describe("PostControllerTest", () => {
 
     describe("#create()", () => {
         test("should delete post by Id", async () => {
-            const id = "1"
+            const id = 1
             const mockRes = httpMocks.createResponse();
             const mockReq = httpMocks.createRequest({
                 body: {
@@ -156,6 +156,34 @@ describe("PostControllerTest", () => {
                 message: "Post created with success"
             })
             expect(createSpy).toHaveBeenCalled()
+            expect(response.statusCode).toEqual(200)
+        })
+    })
+
+    describe("#update()", () => {
+        test("should update post", async () => {
+            const id = 1
+            const mockRes = httpMocks.createResponse();
+            const mockReq = httpMocks.createRequest({
+                params : {
+                    id: 1
+                },
+                body: {
+                    title: mockedPosts[1].title,
+                    body: mockedPosts[1].body,
+                    AuthorId: mockedPosts[1].AuthorId,
+                }
+            });
+            const resJsonSpy = jest.spyOn(mockRes, "json")
+            const updateSpy = jest.spyOn(postRepository, "update").mockResolvedValue(mockedPosts[1])
+            const response = await postController.update(mockReq, mockRes)
+
+            expect(resJsonSpy).toHaveBeenCalledWith({
+                success: true,
+                data: mockedPosts[1],
+                message: "Post updated with success"
+            })
+            expect(updateSpy).toHaveBeenCalledWith(1, mockedPosts[1].title, mockedPosts[1].body, mockedPosts[1].AuthorId)
             expect(response.statusCode).toEqual(200)
         })
     })

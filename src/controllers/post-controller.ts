@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import { postRepository } from "../repositories/post-repository";
-import { Post } from "../models";
 
 class PostController {
   public async list(req: Request, res: Response) {
@@ -15,7 +14,7 @@ class PostController {
 
   public async get(req: Request, res: Response) {
     const { id } = req.params;
-    const response = await postRepository.getById(id);
+    const response = await postRepository.getById(Number(id));
 
     if (!response) {
       return res.status(404).json({
@@ -47,7 +46,7 @@ class PostController {
 
   public async delete(req: Request, res: Response) {
     const { id } = req.params;
-    const response = await postRepository.delete(id);
+    const response = await postRepository.delete(Number(id));
 
     if (!response) {
       return res.status(404).json({
@@ -64,10 +63,26 @@ class PostController {
     });
   }
 
-  public update(req: Request, res: Response) {
+  public async update(req: Request, res: Response) {
+    const response = await postRepository.update(
+      Number(req.params.id),
+      req.body.title,
+      req.body.body,
+      req.body.AuthorId
+    );
+
+    if (!response) {
+      return res.status(404).json({
+        success: false,
+        message: "Entity not found",
+        data: null,
+      });
+    }
+
     return res.json({
       success: true,
-      data: "Post - Update",
+      message: "Post updated with success",
+      data: response,
     });
   }
 }

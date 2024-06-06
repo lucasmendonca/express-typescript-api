@@ -1,7 +1,7 @@
 import { Post } from "../models";
 
 class PostRepository {
-  public getById(id: string): Promise<Post|null> {
+  public getById(id: number): Promise<Post|null> {
     return Post.findOne({
         where: { id }
     })
@@ -12,7 +12,7 @@ class PostRepository {
     return Post.findAll()
   }
 
-  public async delete(id: string): Promise<Post|null> {
+  public async delete(id: number): Promise<Post|null> {
     const post = await this.getById(id)
     
     if (post) {
@@ -30,6 +30,16 @@ class PostRepository {
     })
 
     return await post.save()
+  }
+
+  public async update(id: number, title: string, body: string, AuthorId: number): Promise<Post|null> {
+    const post = await this.getById(id)
+
+    if (!post) {
+      return null
+    }
+
+    return post.update({ title, body, AuthorId });
   }
 }
 
