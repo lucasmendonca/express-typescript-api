@@ -8,7 +8,7 @@
     "coverage": "jest --collectCoverage",
     "build": "npx tsc",
     "init": "npm run build && node dist/src/scripts/seed-db.js",
-    "start": "node dist/app.js",
+    "start": "node dist/src/app.js",
     "dev": "nodemon src/app.ts"
   },
   "author": "Lucas Mendonca [lucasnix@gmail.com]",
