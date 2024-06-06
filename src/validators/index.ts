@@ -8,5 +8,5 @@ export const loginSchema = Joi.object({
 export const postSchema = Joi.object({
   title: Joi.string().max(255).required(),
   body: Joi.string().required(),
-  authorId: Joi.number().required(),
+  AuthorId: Joi.number().required(),
 });

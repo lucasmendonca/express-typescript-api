@@ -134,4 +134,29 @@ describe("PostControllerTest", () => {
             expect(response.statusCode).toEqual(404)
         })
     })
+
+    describe("#create()", () => {
+        test("should delete post by Id", async () => {
+            const id = "1"
+            const mockRes = httpMocks.createResponse();
+            const mockReq = httpMocks.createRequest({
+                body: {
+                    title: "Post title",
+                    body: "Post body",
+                    AuthorId: 1,
+                }
+            });
+            const resJsonSpy = jest.spyOn(mockRes, "json")
+            const createSpy = jest.spyOn(postRepository, "create").mockResolvedValue(mockedPosts[0])
+            const response = await postController.create(mockReq, mockRes)
+
+            expect(resJsonSpy).toHaveBeenCalledWith({
+                success: true,
+                data: mockedPosts[0],
+                message: "Post created with success"
+            })
+            expect(createSpy).toHaveBeenCalled()
+            expect(response.statusCode).toEqual(200)
+        })
+    })
 })

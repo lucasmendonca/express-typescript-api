@@ -1,7 +1,11 @@
 import { DataTypes, Model } from "sequelize";
 import sequelizeConnection from "../configs/db";
 
-export class Post extends Model {}
+export class Post extends Model {
+    title!: string;
+    body!: string;
+    AuthorId!: number;
+}
 
 Post.init(
   {

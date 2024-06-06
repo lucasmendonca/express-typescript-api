@@ -1,14 +1,15 @@
-import { NextFunction, Request, Response } from "express";
+import { Request, Response } from "express";
 import { postRepository } from "../repositories/post-repository";
+import { Post } from "../models";
 
 class PostController {
   public async list(req: Request, res: Response) {
     // TODO: paginate response
     const response = await postRepository.getAll();
-    
+
     return res.json({
       data: response,
-      success: true
+      success: true,
     });
   }
 
@@ -30,11 +31,17 @@ class PostController {
     });
   }
 
-  public async create(req: Request, res: Response, next: NextFunction) {
-    //  const validatedBody = await validateSchema(postSchema, res, req.body)
-    //  console.log(validatedBody)
+  public async create(req: Request, res: Response) {
+    const response = await postRepository.create(
+      req.body.title,
+      req.body.body,
+      req.body.AuthorId
+    );
+
     return res.json({
-      response: "Post - Create",
+      success: true,
+      message: "Post created with success",
+      data: response,
     });
   }
 
@@ -53,7 +60,7 @@ class PostController {
     return res.json({
       success: true,
       data: response,
-      message: "Post deleted with success"
+      message: "Post deleted with success",
     });
   }
 

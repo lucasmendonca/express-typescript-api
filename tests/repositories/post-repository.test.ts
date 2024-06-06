@@ -77,4 +77,22 @@ describe("PostRepositoryTest", () => {
             expect(response).toEqual(null)
         })
     })
+
+    describe("#create()", () => {
+        test("should create new post and return value", async () => {
+            const id = "1"
+     
+            const mockedPost = mockedPosts[0]
+            const saveSpy = jest.spyOn(Post.prototype, "save").mockResolvedValueOnce(mockedPost)
+
+            const response = await postRepository.create(
+                mockedPost.title,
+                mockedPost.body,
+                mockedPost.AuthorId,
+            )
+
+            expect(saveSpy).toHaveBeenCalledTimes(1)
+            expect(response).toEqual(mockedPost)
+        })
+    })
 })

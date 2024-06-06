@@ -7,7 +7,7 @@ describe("schemaValidatorTest", () => {
     const invalidPost = {
       id: "Hello world post",
       body: "My fist post",
-      authorId: 1,
+      AuthorId: 1,
     };
     const mockRes = httpMocks.createResponse();
     const mockReq = httpMocks.createRequest({
@@ -56,7 +56,7 @@ describe("schemaValidatorTest", () => {
     const validPost = {
       title: "Hello world post",
       body: "My fist post",
-      authorId: 1,
+      AuthorId: 1,
     };
     const mockRes = httpMocks.createResponse();
     const mockReq = httpMocks.createRequest({

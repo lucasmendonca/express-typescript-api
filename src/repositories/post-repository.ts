@@ -16,10 +16,20 @@ class PostRepository {
     const post = await this.getById(id)
     
     if (post) {
-      post.destroy()
+     await post.destroy()
     }
 
     return post
+  }
+
+  public async create(title: string, body: string, authorId: number): Promise<Post> {
+    const post = new Post({
+      title:  title,
+      body:  body,
+      AuthorId: authorId
+    })
+
+    return await post.save()
   }
 }
 
