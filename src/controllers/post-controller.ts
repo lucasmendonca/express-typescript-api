@@ -31,6 +31,16 @@ class PostController {
   }
 
   public async create(req: Request, res: Response) {
+    const loggedId: number = (req.headersDistinct["payload"] as any).id
+
+    if (loggedId != req.body.AuthorId) {
+      return res.status(403).json({
+        success: false,
+        message: "Use cannot create posts on behalf of another author",
+        data: null,
+      });  
+    }
+
     const response = await postRepository.create(
       req.body.title,
       req.body.body,
@@ -44,6 +54,7 @@ class PostController {
     });
   }
 
+  // TODO: check if user is the author of the post 
   public async delete(req: Request, res: Response) {
     const { id } = req.params;
     const response = await postRepository.delete(Number(id));
@@ -63,6 +74,7 @@ class PostController {
     });
   }
 
+  // TODO: check if user is the author of the post 
   public async update(req: Request, res: Response) {
     const response = await postRepository.update(
       Number(req.params.id),

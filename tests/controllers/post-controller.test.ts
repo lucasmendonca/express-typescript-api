@@ -136,14 +136,19 @@ describe("PostControllerTest", () => {
     })
 
     describe("#create()", () => {
-        test("should delete post by Id", async () => {
-            const id = 1
+        test("should create a post", async () => {
+            const userId = 1
             const mockRes = httpMocks.createResponse();
             const mockReq = httpMocks.createRequest({
+                headersDistinct: {
+                    payload: {
+                        id: userId
+                    }
+                },
                 body: {
                     title: "Post title",
                     body: "Post body",
-                    AuthorId: 1,
+                    AuthorId: userId,
                 }
             });
             const resJsonSpy = jest.spyOn(mockRes, "json")
@@ -157,6 +162,35 @@ describe("PostControllerTest", () => {
             })
             expect(createSpy).toHaveBeenCalled()
             expect(response.statusCode).toEqual(200)
+        })
+
+        test("should not cretate post of behalf of another author(user)", async () => {
+            const userId = 1
+            const anotherUserId = 2
+            const mockRes = httpMocks.createResponse();
+            const mockReq = httpMocks.createRequest({
+                headersDistinct: {
+                    payload: {
+                        id: userId
+                    }
+                },
+                body: {
+                    title: "Post title",
+                    body: "Post body",
+                    AuthorId: anotherUserId,
+                }
+            });
+            const resJsonSpy = jest.spyOn(mockRes, "json")
+            const createSpy = jest.spyOn(postRepository, "create").mockReset()
+            const response = await postController.create(mockReq, mockRes)
+
+            expect(resJsonSpy).toHaveBeenCalledWith({
+                success: false,
+                data: null,
+                message: "Use cannot create posts on behalf of another author"
+            })
+            expect(createSpy).not.toHaveBeenCalled()
+            expect(response.statusCode).toEqual(403)
         })
     })
 
@@ -185,6 +219,32 @@ describe("PostControllerTest", () => {
             })
             expect(updateSpy).toHaveBeenCalledWith(1, mockedPosts[1].title, mockedPosts[1].body, mockedPosts[1].AuthorId)
             expect(response.statusCode).toEqual(200)
+        })
+
+        test("should return error when post does not exist", async () => {
+            const id = 1
+            const mockRes = httpMocks.createResponse();
+            const mockReq = httpMocks.createRequest({
+                params : {
+                    id: 1
+                },
+                body: {
+                    title: mockedPosts[1].title,
+                    body: mockedPosts[1].body,
+                    AuthorId: mockedPosts[1].AuthorId,
+                }
+            });
+            const resJsonSpy = jest.spyOn(mockRes, "json")
+            const updateSpy = jest.spyOn(postRepository, "update").mockResolvedValue(null)
+            const response = await postController.update(mockReq, mockRes)
+
+            expect(updateSpy).toHaveBeenCalledWith(1, mockedPosts[1].title, mockedPosts[1].body, mockedPosts[1].AuthorId)
+            expect(resJsonSpy).toHaveBeenCalledWith({
+                success: false,
+                message: 'Entity not found',
+                data: null
+            })
+            expect(response.statusCode).toEqual(404)
         })
     })
 })

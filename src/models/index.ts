@@ -26,7 +26,12 @@ Post.init(
   }
 );
 
-export class User extends Model {}
+export class User extends Model {
+  id?: number;
+  name!: string;
+  email!: string;
+  password!: string;
+}
 
 User.init(
   {
