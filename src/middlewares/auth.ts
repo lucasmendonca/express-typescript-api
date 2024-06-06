@@ -16,7 +16,7 @@ export function authChecker(req: Request, res: Response, next: NextFunction) {
     next();
     
   } catch (err) {
-    console.error("Error when authenticating user", err)
+    console.log("Error when authenticating user")
     res.status(401).json({
       success: false,
       message: "Access Denied! Plesse provide a valid token.",

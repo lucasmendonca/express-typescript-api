@@ -1,6 +1,6 @@
 # Basic Blog REST API [Express.js + Typescript]
 
-This repos contains a RESTful API endpoint using Express.js and TypeScript.
+This repo contains a RESTful API using Express.js and TypeScript.
 The API allows users to create and retrieve blog posts. 
 
 ## Tech stack
@@ -15,10 +15,10 @@ The API allows users to create and retrieve blog posts.
 ## Endpoints
 - `POST /v1/users/login`: Does the user login and return JWT token
 - `GET /v1/posts`: List all posts
-- `GET /v1/posts/:id`: Get one post details
+- `GET /v1/posts/:id`: Get a post details
 - `POST /v1/posts`: Create a new post
-- `PUT /v1/posts/:id`: Update a existing post
-- `DELETE /v1/posts/:id`: Delete a  post
+- `PUT /v1/posts/:id`: Update an existing post
+- `DELETE /v1/posts/:id`: Delete a post
 
 ## Getting Started
 
@@ -99,6 +99,6 @@ npm run start
 Default values are provided but in order to overwrite default configurations you will need to add the following environment variables to your `.env` file. Plese clone and rename the `.env.sample` file.
 
 ```
-PORT=3000
-jwtSecret="defaultSecret"
+PORT=<<SERVER_DEFAULT_PORT>>
+jwtSecret=<<JWT_SECRET_KEY>>
 ```
