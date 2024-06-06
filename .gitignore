@@ -3,3 +3,5 @@ node_modules/*
 .DS_Store
 .env
 database.sqlite3
+.vscode/*
+coverage/*
