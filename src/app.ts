@@ -1,9 +1,10 @@
-import express, { Application } from 'express';
-import dotenv from 'dotenv';
-import cors from 'cors';
-import helmet from 'helmet';
+import express, { Application } from "express";
+import dotenv from "dotenv";
+import cors from "cors";
+import helmet from "helmet";
 
-import { router } from './routes'
+import { router } from "./routes";
+import { NotFoundHandler } from "./middlewares/not-found";
 
 dotenv.config();
 
@@ -16,7 +17,8 @@ app.use(helmet());
 
 app.disable("x-powered-by");
 
-app.use('/api/v1', router)
+app.use("/api/v1", router);
+app.use(NotFoundHandler);
 
 app.listen(port, () => {
   console.log(`[server]: Server is running at http://localhost:${port}`);
