@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { postRepository } from "../repositories/post-repository";
+import { getAuthenticatedUser } from "../utils/helpers";
 
 class PostController {
   public async list(req: Request, res: Response) {
@@ -31,14 +32,15 @@ class PostController {
   }
 
   public async create(req: Request, res: Response) {
-    const loggedId: number = (req.headersDistinct["payload"] as any).id
+    const payload = getAuthenticatedUser(req);
+    const loggedId: number = payload.id;
 
     if (loggedId != req.body.AuthorId) {
       return res.status(403).json({
         success: false,
         message: "Use cannot create posts on behalf of another author",
         data: null,
-      });  
+      });
     }
 
     const response = await postRepository.create(
@@ -54,18 +56,28 @@ class PostController {
     });
   }
 
-  // TODO: check if user is the author of the post 
   public async delete(req: Request, res: Response) {
-    const { id } = req.params;
-    const response = await postRepository.delete(Number(id));
+    const id = Number(req.params.id);
+    const user = getAuthenticatedUser(req);
+    const post = await postRepository.getById(id);
 
-    if (!response) {
+    if (!post) {
       return res.status(404).json({
         success: false,
         message: "Entity not found",
         data: null,
       });
     }
+
+    if (user.id != post.AuthorId) {
+      return res.status(403).json({
+        success: false,
+        message: "Use cannot delete posts on behalf of another author",
+        data: null,
+      });
+    }
+
+    const response = await postRepository.delete(id);
 
     return res.json({
       success: true,
@@ -74,22 +86,34 @@ class PostController {
     });
   }
 
-  // TODO: check if user is the author of the post 
   public async update(req: Request, res: Response) {
-    const response = await postRepository.update(
-      Number(req.params.id),
-      req.body.title,
-      req.body.body,
-      req.body.AuthorId
-    );
+    const user = getAuthenticatedUser(req);
+    const id = Number(req.params.id);
 
-    if (!response) {
+    const post = await postRepository.getById(id);
+
+    if (!post) {
       return res.status(404).json({
         success: false,
         message: "Entity not found",
         data: null,
       });
     }
+
+    if (user.id != post.AuthorId) {
+      return res.status(403).json({
+        success: false,
+        message: "Use cannot update posts on behalf of another author",
+        data: null,
+      });
+    }
+
+    const response = await postRepository.update(
+      Number(req.params.id),
+      req.body.title,
+      req.body.body,
+      req.body.AuthorId
+    );
 
     return res.json({
       success: true,

@@ -73,6 +73,6 @@ describe("authCheckerTest", () => {
     expect(jwtSpy).toHaveBeenCalledWith(mockedToken, getJwtSecret())
     expect(resJsonSpy).not.toHaveBeenCalled()
     expect(mockNext).toHaveBeenCalled();
-    expect(mockReq.headersDistinct["payload"]).toEqual({ foo: "bar" });
+    expect(mockReq.headers["payload"]).toEqual({ foo: "bar" });
   });
 });

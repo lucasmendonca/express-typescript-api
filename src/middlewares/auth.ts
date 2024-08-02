@@ -12,7 +12,7 @@ export function authChecker(req: Request, res: Response, next: NextFunction) {
     }
 
     const payload: any = jwt.verify(token, jwtSecret)
-    req.headersDistinct["payload"] = payload;
+    req.headers["payload"] = payload;
     next();
     
   } catch (err) {

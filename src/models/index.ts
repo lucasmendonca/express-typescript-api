@@ -1,6 +1,14 @@
 import { DataTypes, Model } from "sequelize";
 import sequelizeConnection from "../configs/db";
 
+export type AuthenticatedUser = {
+    id: number;
+    email: string
+    name: string
+    iat: number
+    exp: number
+}
+  
 export class Post extends Model {
     title!: string;
     body!: string;
